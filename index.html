@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Draw</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+</head>
+
+<body>
+  
+   <div class="container" onmousemove="getPos(event)" onmouseout="stopTracking()">
+        
+        <canvas id="previewCanvas"></canvas>
+        <canvas id="drawCanvas"></canvas>
+        
+        <div class="menushow" id="lmenushow"></div>
+        
+        <div class="menushow" id="bmenushow"></div>
+        
+        <div class="menu">
+              
+            <div class="left_menu" id="left_menu" >
+               
+                <div onmouseover="pwshow()" onmouseout="pwhide()" id="pwtoggle">
+                    <a onclick="pen()" id="pen" class="button"></a>
+                    <div id="pen_width">
+                        <a id="1px" onclick="pen1()">1px</a>
+                        <a id="2px" onclick="pen2()">2px</a>
+                        <a id="3px" onclick="pen3()">3px</a>
+                        <a id="4px" onclick="pen4()">4px</a>
+                        <a id="5px" onclick="pen5()">5px</a>
+                    </div>
+                </div>
+            
+            <div onmouseover="ewshow()" onmouseout="ewhide()" id="ewtoggle">
+            <a onclick="eraser()" id="eraser" class="button"></a>
+                <div id="eraser_width">
+                    <a id="e1px" onclick="eraser1()">1px</a>
+                    <a id="e2px" onclick="eraser2()">2px</a>
+                    <a id="e3px" onclick="eraser3()">3px</a>
+                    <a id="e4px" onclick="eraser4()">4px</a>
+                    <a id="e5px" onclick="eraser5()">5px</a>
+                </div>
+            </div>
+            
+            </div>
+            
+            <div class="bottom_menu" id="bottom_menu">
+               
+               <a onclick="undo()" id="undo">Undo</a>
+              
+                
+                <a onclick="startPath()" id="startPath" class="button">Line</a>
+                <a onclick="endPath()" onmouseover="previewEnd()" onmouseout="previewEndOut()" id="endPath" ></a>
+                <button onclick="fill()" id="fill" ></button>
+                <div id="savehover">
+                <a onmouseover="previewEnd()" onmouseout="previewEndOut()" id="save"></a>
+                <div id="savechoice">
+                    <a id="transparent" onclick="screenshot()" onmouseover="previewEnd()" onmouseout="previewEndOut()" href="" download>Transparent</a><br>
+                    <a id="white" onclick="screenshotwhite()" onmouseover="previewEnd()" onmouseout="previewEndOut()" href="" download>White</a>
+                </div>
+                </div>
+                
+            </div>
+
+       </div>
+       
+        <div class="coordinates">
+            <p>Click (<span id="xcoor">x</span>, <span id="ycoor">y</span>)</p>
+            <p>Hover <span id="hovcoor">(x, y)</span></p>
+        </div>
+        
+        <a onclick="toggle()" id="toggle">Info</a>
+        
+        <div id="sidebar">
+           
+            <p>
+            Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+            
+            <br>
+
+            Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+            
+            <br>
+
+            Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+            
+            <br>
+
+            Icons made by <a href="https://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+            </p>
+            
+        </div>
+    
+    </div>
+    
+    
+    <script>
+        
+        var preCanvas = document.getElementById("previewCanvas");
+        preCanvas.width = window.innerWidth;
+        preCanvas.height = window.innerHeight;
+        var prectx = preCanvas.getContext("2d");
+        
+        var canvas = document.getElementById("drawCanvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var ctx = canvas.getContext("2d");
+        
+        ctx.strokeStyle="#000";
+        
+        prectx.fillStyle = "#fff";
+        prectx.fillRect(0, 0, preCanvas.width, preCanvas.height);
+        
+        ctx.fillStyle = "#000";
+        
+        prectx.strokeStyle = "#aaaaaa";
+        
+        var x;
+        var y;
+        
+        var prevx;
+        var prevy;
+        
+        var begx;
+        var begy;
+        
+        var penwidnum;
+        var eraserwidnum;
+        
+        var ispen = true;
+        var iseraser = false;
+        
+        var isendpath = false;
+        
+        var shapearray = [];
+        
+        var shapearray_last;
+        var last_xarray;
+        var last_yarray;
+        
+        var deleted_xarray = [];
+        var deleted_yarray = [];
+        
+        var isfill = [];
+        var penoreraser = [];
+        var penwidths = [];
+        
+        var widnum = 1;
+        
+        var startPathbutton = document.getElementById("startPath");
+        startPathbutton.disabled = true;
+        startPathbutton.style.opacity = "0.5";
+        startPathbutton.style.cursor = "default";
+        
+        var endPathbutton = document.getElementById("endPath");
+        endPathbutton.disabled = true;
+        endPathbutton.style.opacity = "0.5";
+        endPathbutton.style.cursor = "default";
+        
+        var fillbutton = document.getElementById("fill");
+        fillbutton.disabled = true;
+        fillbutton.style.opacity = "0.5";
+        fillbutton.style.cursor = "default";
+    
+        var toggleb = document.getElementById("toggle");
+        var sidebar = document.getElementById("sidebar");
+        sidebar.style.display = "none";
+        
+        var pen_width = document.getElementById("pen_width");
+        pen_width.style.display = "none";
+        
+        var onepx = document.getElementById("1px");
+        var twopx = document.getElementById("2px");
+        var threepx = document.getElementById("3px");
+        var fourpx = document.getElementById("4px");
+        var fivepx = document.getElementById("5px");
+        
+        onepx.style.backgroundColor = "#f4f4f4";
+        
+        var eraser_width = document.getElementById("eraser_width");
+        eraser_width.style.display = "none";
+        
+        var eonepx = document.getElementById("e1px");
+        var etwopx = document.getElementById("e2px");
+        var ethreepx = document.getElementById("e3px");
+        var efourpx = document.getElementById("e4px");
+        var efivepx = document.getElementById("e5px");
+        
+        eonepx.style.backgroundColor = "#f4f4f4";
+        
+        penwidnum = 1;
+        eraserwidnum = 1;
+        
+    
+        
+        canvas.addEventListener( "click", function( event ) {
+            
+            if (prevx !== undefined) {
+                            
+                ctx.lineTo(prevx,prevy);
+                x = event.pageX;
+                y = event.pageY;
+                ctx.lineTo(x,y);
+                ctx.stroke();
+                
+                document.getElementById("xcoor").innerHTML = x;
+                document.getElementById("ycoor").innerHTML = y;
+                
+                prevx = x;
+                prevy = y;
+                
+                startPathbutton.disabled = false;
+                startPathbutton.style.opacity = "1.0";
+                startPathbutton.style.cursor = "pointer";
+                
+                endPathbutton.disabled = false;
+                endPathbutton.style.opacity = "1.0";
+                endPathbutton.style.cursor = "pointer";
+                
+                last_xarray.push(x);
+                last_yarray.push(y);
+                
+                console.log(shapearray);
+                console.log(shapearray[shapearray.length - 1]);
+                console.log(shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2]);
+                console.log(shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1]);
+                
+            } else if (prevx == undefined) {
+                
+                x = event.pageX;
+                y = event.pageY;
+    
+                document.getElementById("xcoor").innerHTML = x;
+                document.getElementById("ycoor").innerHTML = y;
+            
+                prevx = x;
+                prevy = y;
+                
+                begx = x;
+                begy = y;
+                
+                ctx.moveTo(begx,begy);
+                    
+                ctx.beginPath();
+                
+                shapearray.push([[x],[y]]);
+                
+                shapearray_last = shapearray[shapearray.length-1];
+                last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2];
+                last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1];
+                
+                console.log(shapearray);
+                console.log(shapearray_last);
+                console.log(last_xarray);
+                console.log(last_yarray);
+                
+            };
+        });
+        
+        function getPos(e){
+            
+    		x=e.clientX;
+    		y=e.clientY;
+    		cursor="(" + x + ", " + y + ")";
+    		document.getElementById("hovcoor").innerHTML=cursor;
+            
+    	}
+
+        function render() {
+            
+            prectx.clearRect(0, 0, preCanvas.width, preCanvas.height);
+            
+            prectx.beginPath();
+            
+            if (isendpath===false) {
+            
+                prectx.moveTo(prevx,prevy);
+                prectx.lineTo(x,y);
+                
+            }else {
+                prectx.moveTo(prevx,prevy);
+                prectx.lineTo(begx,begy);
+            }
+            
+            prectx.stroke();
+            
+            requestAnimationFrame(render);
+                
+        }
+        
+         render();
+        
+        function undo() {
+            
+            deleted_xarray.push(last_xarray[last_xarray.length-1]);
+            last_xarray.pop();
+            
+            deleted_yarray.push(last_yarray[last_yarray.length-1]);
+            last_yarray.pop();
+            
+            console.log(last_xarray);
+            //console.log(deleted_xarray);
+            console.log(last_yarray);
+            //console.log(deleted_yarray);
+            
+            ctx.beginPath();
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            console.log(shapearray);
+            
+           for (j = 0; j < shapearray.length; j++) {
+   
+               console.log(shapearray[j]);
+  
+                    for (k = 0; k < shapearray[j][0].length; k++){
+                        
+                        console.log(shapearray[j][0][k]);
+                        
+                        ctx.lineTo(shapearray[j][0][k],shapearray[j][1][k]);
+                       
+                        if (k == shapearray[j][0].length - 1) {
+                            
+                            if (isfill[j] == true) {
+                                ctx.fill();
+                            }
+                            
+                            if (isfill[shapearray.length-1] == true) {
+                                ctx.globalCompositeOperation="destination-out";
+                                ctx.fill();
+                                
+                                console.log("now");
+                                ctx.globalCompositeOperation="source-over";
+                            }
+                            ctx.stroke();
+                            ctx.beginPath();
+                        }
+                    }
+            }
+            
+            if (last_xarray.length == 0) {
+                shapearray.pop();
+                
+                shapearray_last = shapearray[shapearray.length-1];
+                last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2];
+                last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1];
+                
+            }
+            
+            ctx.stroke();
+            
+            prevx = last_xarray[last_xarray.length-1];
+            prevy = last_yarray[last_yarray.length-1];
+            
+            console.log(isfill);
+            
+        }
+        
+        function redo() {
+            
+        }
+        
+        
+        
+        function previewEnd() {
+            isendpath = true;
+        }
+        
+        function previewEndOut() {
+            isendpath = false;
+        }
+    
+    	function stopTracking() {
+    		document.getElementById("hovcoor").innerHTML="(x, y)";
+    	}
+        
+        function pen() {
+            ctx.globalCompositeOperation="source-over";
+            ctx.fillStyle="#000";
+            
+            document.getElementById("pen").style.left = "-5px";
+            document.getElementById("eraser").style.left = "-50px";
+            
+            ispen = true;
+            iseraser = false;
+            
+            if (penwidnum == 1) {
+                pen1();
+            } else if (penwidnum == 2) {
+                pen2();
+            } else if (penwidnum == 3) {
+                pen3();
+            } else if (penwidnum == 4) {
+                pen4();
+            } else if (penwidnum == 5) {
+                pen5();
+            }
+            
+            startPath();
+            
+            
+            
+        }
+        
+        function eraser() {
+            ctx.globalCompositeOperation="destination-out";
+            
+            document.getElementById("pen").style.left = "-50px";
+            document.getElementById("eraser").style.left = "-5px";
+            
+            ispen = false;
+            iseraser = true;
+            
+            if (eraserwidnum == 1) {
+                eraser1();
+            } else if (eraserwidnum == 2) {
+                eraser2();
+            } else if (eraserwidnum == 3) {
+                eraser3();
+            } else if (eraserwidnum == 4) {
+                eraser4();
+            } else if (eraserwidnum == 5) {
+                eraser5();
+            }
+            
+            startPath();
+            
+        }
+        
+        startPathbutton.addEventListener("click", peneraser);
+        
+        endPathbutton.addEventListener("click", peneraser);
+        
+        function peneraser() {
+            isfill.push(false);
+            console.log(isfill);
+
+            penoreraser.push(ispen);
+            
+            penwidths.push(widnum);
+            
+            console.log(penwidths);
+            
+            console.log(penoreraser);
+        }
+        
+        
+        function endPath() {
+            ctx.closePath();
+            ctx.stroke();
+            
+    
+            
+            last_xarray.push(last_xarray[0]);
+            last_yarray.push(last_yarray[0]);
+    
+            prevx = undefined;
+            prevy = undefined;
+            
+            fillbutton.disabled = false;
+            fillbutton.style.opacity = "1.0";
+            fillbutton.style.cursor = "pointer";
+            
+            startPathbutton.disabled = true;
+            startPathbutton.style.opacity = "0.5";
+            startPathbutton.style.cursor = "default";
+            
+            endPathbutton.disabled = true;
+            endPathbutton.style.opacity = "0.5";
+            endPathbutton.style.cursor = "default";
+            
+            
+        }
+        
+        function startPath() {
+            ctx.beginPath();
+            
+            
+            
+            prevx = undefined;
+            prevy = undefined;
+            
+            startPathbutton.disabled = true;
+            startPathbutton.style.opacity = "0.5";
+            startPathbutton.style.cursor = "default";
+            
+            endPathbutton.disabled = true;
+            endPathbutton.style.opacity = "0.5";
+            endPathbutton.style.cursor = "default";
+            
+            
+        }
+        
+        
+        
+        function fill() {
+            ctx.fill();
+            
+            fillbutton.disabled = true;
+            fillbutton.style.opacity = "0.5";
+            fillbutton.style.cursor = "default";
+            
+            isfill[isfill.length - 1] = true;
+            
+            console.log(isfill);
+        }
+        
+        function screenshot() {
+            /*
+            prectx.fillStyle = "#fff";
+            prectx.fillRect(0, 0, preCanvas.width, preCanvas.height);
+            
+            var sscanvas = document.createElement("canvas");
+            sscanvas.width = window.innerWidth;
+            sscanvas.height = window.innerHeight;
+            var ssctx = sscanvas.getContext("2d");
+            
+            ssctx.drawImage(preCanvas,0,0);
+            ssctx.drawImage(canvas,0,0);
+            
+            var save = document.getElementById("save");
+            var img = sscanvas.toDataURL("image/png");
+            save.setAttribute('href', img);
+            
+            */
+            
+            var transparent = document.getElementById("transparent");
+            var img = canvas.toDataURL("image/png");
+            transparent.setAttribute('href', img);
+        }
+        
+        
+        function screenshotwhite() {
+            
+            prectx.fillStyle = "#fff";
+            prectx.fillRect(0, 0, preCanvas.width, preCanvas.height);
+            
+            var sscanvas = document.createElement("canvas");
+            sscanvas.width = window.innerWidth;
+            sscanvas.height = window.innerHeight;
+            var ssctx = sscanvas.getContext("2d");
+            
+            ssctx.drawImage(preCanvas,0,0);
+            ssctx.drawImage(canvas,0,0);
+            
+            var white = document.getElementById("white");
+            var img = sscanvas.toDataURL("image/png");
+            white.setAttribute('href', img);
+        }
+        
+        function toggle() {
+            
+            if (sidebar.style.display === "none") {
+                sidebar.style.display = "initial";
+                toggleb.style.color = "#f7f7f7";
+                
+            } else {
+                sidebar.style.display = "none";
+                toggleb.style.color = "#000"
+            }
+    
+        }
+        /*
+        function leftmenushow() {
+            document.getElementById("left_menu").style.left = "0px";
+        }
+        
+        function leftmenuhide () {
+            document.getElementById("left_menu").style.left = "-115px";
+        }
+        
+        function menushow() {
+            document.getElementById("bottom_menu").style.bottom = "0px";
+        }
+        
+        function menuhide() {
+            document.getElementById("bottom_menu").style.bottom = "-110px";
+        }
+        */
+        
+        function pwshow() {
+            
+            if (ispen === true) {
+                pen_width.style.display = "block";
+            }
+        }
+        
+        function pwhide() {
+            
+            pen_width.style.display = "none";
+        }
+        
+        function pen1() {
+            
+            penwidnum=1;
+            
+            widnum = 1;
+            
+            ctx.lineWidth=1;
+            
+            onepx.style.backgroundColor = "#f4f4f4";
+            twopx.style.backgroundColor = "transparent";
+            threepx.style.backgroundColor = "transparent";
+            fourpx.style.backgroundColor = "transparent";
+            fivepx.style.backgroundColor = "transparent";
+        }
+        
+        function pen2() {
+            
+            penwidnum=2;
+            
+            widnum = 2;
+            
+            ctx.lineWidth=2;
+            
+            onepx.style.backgroundColor = "transparent";
+            twopx.style.backgroundColor = "#f4f4f4";
+            threepx.style.backgroundColor = "transparent";
+            fourpx.style.backgroundColor = "transparent";
+            fivepx.style.backgroundColor = "transparent";
+        }
+        
+        function pen3() {
+            
+            penwidnum=3;
+            
+            widnum = 3;
+            
+            ctx.lineWidth=3;
+            
+            onepx.style.backgroundColor = "transparent";
+            twopx.style.backgroundColor = "transparent";
+            threepx.style.backgroundColor = "#f4f4f4";
+            fourpx.style.backgroundColor = "transparent";
+            fivepx.style.backgroundColor = "transparent";
+        }
+        
+        function pen4() {
+            
+            penwidnum=4;
+            
+            widnum = 4;
+            
+            ctx.lineWidth=4;
+            
+            onepx.style.backgroundColor = "transparent";
+            twopx.style.backgroundColor = "transparent";
+            threepx.style.backgroundColor = "transparent";
+            fourpx.style.backgroundColor = "#f4f4f4";
+            fivepx.style.backgroundColor = "transparent";
+        }
+        
+        function pen5() {
+            
+            penwidnum=5;
+            
+            widnum = 5;
+            
+            ctx.lineWidth=5;
+            
+            onepx.style.backgroundColor = "transparent";
+            twopx.style.backgroundColor = "transparent";
+            threepx.style.backgroundColor = "transparent";
+            fourpx.style.backgroundColor = "transparent";
+            fivepx.style.backgroundColor = "#f4f4f4";
+        }
+        
+        function ewshow() {
+            
+            if (iseraser === true) {
+                eraser_width.style.display = "block";
+            };
+        }
+        
+        function ewhide() {
+            
+            eraser_width.style.display = "none";
+        }
+        
+        function eraser1() {
+            
+            eraserwidnum=1;
+            
+            widnum = 1;
+            
+            ctx.lineWidth=1;
+            
+            eonepx.style.backgroundColor = "#f4f4f4";
+            etwopx.style.backgroundColor = "transparent";
+            ethreepx.style.backgroundColor = "transparent";
+            efourpx.style.backgroundColor = "transparent";
+            efivepx.style.backgroundColor = "transparent";
+        }
+        
+        function eraser2() {
+            
+            eraserwidnum=2;
+            
+            widnum = 2;
+            
+            ctx.lineWidth=2;
+            
+            eonepx.style.backgroundColor = "transparent";
+            etwopx.style.backgroundColor = "#f4f4f4";
+            ethreepx.style.backgroundColor = "transparent";
+            efourpx.style.backgroundColor = "transparent";
+            efivepx.style.backgroundColor = "transparent";
+        }
+        
+        function eraser3() {
+            
+            eraserwidnum=3;
+            
+            widnum = 3;
+            
+            ctx.lineWidth=3;
+            
+            eonepx.style.backgroundColor = "transparent";
+            etwopx.style.backgroundColor = "transparent";
+            ethreepx.style.backgroundColor = "#f4f4f4";
+            efourpx.style.backgroundColor = "transparent";
+            efivepx.style.backgroundColor = "transparent";
+        }
+        
+        function eraser4() {
+            
+            eraserwidnum=4;
+            
+            widnum = 4;
+            
+            ctx.lineWidth=4;
+            
+            eonepx.style.backgroundColor = "transparent";
+            etwopx.style.backgroundColor = "transparent";
+            ethreepx.style.backgroundColor = "transparent";
+            efourpx.style.backgroundColor = "#f4f4f4";
+            efivepx.style.backgroundColor = "transparent";
+        }
+        
+        function eraser5() {
+            
+            eraserwidnum=5;
+            
+            widnum = 5;
+            
+            ctx.lineWidth=5;
+            
+            eonepx.style.backgroundColor = "transparent";
+            etwopx.style.backgroundColor = "transparent";
+            ethreepx.style.backgroundColor = "transparent";
+            efourpx.style.backgroundColor = "transparent";
+            efivepx.style.backgroundColor = "#f4f4f4";
+        }
+
+    </script>
+    
+    
+</body>
+</html>
