@@ -50,7 +50,6 @@
                
                <a onclick="undo()" id="undo">Undo</a>
               
-                
                 <a onclick="startPath()" id="startPath" class="button">Line</a>
                 <a onclick="endPath()" onmouseover="previewEnd()" onmouseout="previewEndOut()" id="endPath" ></a>
                 <button onclick="fill()" id="fill" ></button>
@@ -301,9 +300,7 @@
             last_yarray.pop();
             
             console.log(last_xarray);
-            //console.log(deleted_xarray);
             console.log(last_yarray);
-            //console.log(deleted_yarray);
             
             ctx.beginPath();
             
@@ -318,36 +315,61 @@
                     for (k = 0; k < shapearray[j][0].length; k++){
                         
                         console.log(shapearray[j][0][k]);
+                         
+                        
                         
                         ctx.lineTo(shapearray[j][0][k],shapearray[j][1][k]);
+                        
                        
                         if (k == shapearray[j][0].length - 1) {
                             
-                            if (isfill[j] == true) {
-                                ctx.fill();
-                            }
-                            
+
                             if (isfill[shapearray.length-1] == true) {
-                                ctx.globalCompositeOperation="destination-out";
-                                ctx.fill();
+                            
+                                if (penoreraser[shapearray.length-1] == true){
+                                    ctx.globalCompositeOperation="destination-out";
+                                    ctx.fill();
+                                    
+                                }  else if(penoreraser[shapearray.length-1] == false) {
+                                    console.log("tes");
+                                    for (l = 0; l < shapearray[shapearray.length][0]; l++){
+                                        ctx.globalCompositeOperation="destination-out";
+                                        ctx.lineTo(shapearray[shapearray.length-1][0][l],shapearray[shapearray.length-1][l][1]);
+                                    }
+                                
+                                }
                                 
                                 console.log("now");
+                                
                                 ctx.globalCompositeOperation="source-over";
+                                
+                                
+                                isfill.pop();
+                                
+                            }
+                            
+                            
+                            
+                            if (isfill[j] == true) {
+                                ctx.fill();
                             }
                             ctx.stroke();
                             ctx.beginPath();
                         }
                     }
-            }
+            
             
             if (last_xarray.length == 0) {
                 shapearray.pop();
+                
+               penoreraser.pop();
                 
                 shapearray_last = shapearray[shapearray.length-1];
                 last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2];
                 last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1];
                 
             }
+           }
             
             ctx.stroke();
             
@@ -355,6 +377,8 @@
             prevy = last_yarray[last_yarray.length-1];
             
             console.log(isfill);
+            
+            console.log(penoreraser);
             
         }
         
@@ -477,8 +501,6 @@
         function startPath() {
             ctx.beginPath();
             
-            
-            
             prevx = undefined;
             prevy = undefined;
             
@@ -489,8 +511,6 @@
             endPathbutton.disabled = true;
             endPathbutton.style.opacity = "0.5";
             endPathbutton.style.cursor = "default";
-            
-            
         }
         
         
@@ -508,24 +528,6 @@
         }
         
         function screenshot() {
-            /*
-            prectx.fillStyle = "#fff";
-            prectx.fillRect(0, 0, preCanvas.width, preCanvas.height);
-            
-            var sscanvas = document.createElement("canvas");
-            sscanvas.width = window.innerWidth;
-            sscanvas.height = window.innerHeight;
-            var ssctx = sscanvas.getContext("2d");
-            
-            ssctx.drawImage(preCanvas,0,0);
-            ssctx.drawImage(canvas,0,0);
-            
-            var save = document.getElementById("save");
-            var img = sscanvas.toDataURL("image/png");
-            save.setAttribute('href', img);
-            
-            */
-            
             var transparent = document.getElementById("transparent");
             var img = canvas.toDataURL("image/png");
             transparent.setAttribute('href', img);
@@ -562,23 +564,6 @@
             }
     
         }
-        /*
-        function leftmenushow() {
-            document.getElementById("left_menu").style.left = "0px";
-        }
-        
-        function leftmenuhide () {
-            document.getElementById("left_menu").style.left = "-115px";
-        }
-        
-        function menushow() {
-            document.getElementById("bottom_menu").style.bottom = "0px";
-        }
-        
-        function menuhide() {
-            document.getElementById("bottom_menu").style.bottom = "-110px";
-        }
-        */
         
         function pwshow() {
             
