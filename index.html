@@ -14,34 +14,34 @@
         <canvas id="previewCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
         
-        <div class="menushow" id="lmenushow"></div>
+      <!--  <div class="menushow" id="lmenushow"></div>
         
-        <div class="menushow" id="bmenushow"></div>
+        <div class="menushow" id="bmenushow"></div>-->
         
         <div class="menu">
               
             <div class="left_menu" id="left_menu" >
                
-                <div onmouseover="pwshow()" onmouseout="pwhide()" id="pwtoggle">
+                <div id="pwtoggle">
                     <a onclick="pen()" id="pen" class="button"></a>
-                    <div id="pen_width">
+                <!--    <div id="pen_width">
                         <a id="1px" onclick="pen1()">1px</a>
                         <a id="2px" onclick="pen2()">2px</a>
                         <a id="3px" onclick="pen3()">3px</a>
                         <a id="4px" onclick="pen4()">4px</a>
                         <a id="5px" onclick="pen5()">5px</a>
-                    </div>
+                    </div>-->
                 </div>
             
-            <div onmouseover="ewshow()" onmouseout="ewhide()" id="ewtoggle">
+            <div id="ewtoggle">
             <a onclick="eraser()" id="eraser" class="button"></a>
-                <div id="eraser_width">
+                <!--<div id="eraser_width">
                     <a id="e1px" onclick="eraser1()">1px</a>
                     <a id="e2px" onclick="eraser2()">2px</a>
                     <a id="e3px" onclick="eraser3()">3px</a>
                     <a id="e4px" onclick="eraser4()">4px</a>
                     <a id="e5px" onclick="eraser5()">5px</a>
-                </div>
+                </div>-->
             </div>
             
             </div>
@@ -116,6 +116,10 @@
         
         prectx.strokeStyle = "#aaaaaa";
         
+        prectx.lineWidth = 2;
+        
+        ctx.lineWidth = 3;
+        
         var x;
         var y;
         
@@ -124,10 +128,10 @@
         
         var begx;
         var begy;
-        
+        /*
         var penwidnum;
         var eraserwidnum;
-        
+        */
         var ispen = true;
         var iseraser = false;
         
@@ -144,9 +148,10 @@
         
         var isfill = [];
         var penoreraser = [];
-        var penwidths = [];
-        
+       
+        /*
         var widnum = 1;
+        */
         
         var startPathbutton = document.getElementById("startPath");
         startPathbutton.disabled = true;
@@ -166,10 +171,10 @@
         var toggleb = document.getElementById("toggle");
         var sidebar = document.getElementById("sidebar");
         sidebar.style.display = "none";
-        
+       /* 
         var pen_width = document.getElementById("pen_width");
         pen_width.style.display = "none";
-        
+       
         var onepx = document.getElementById("1px");
         var twopx = document.getElementById("2px");
         var threepx = document.getElementById("3px");
@@ -177,6 +182,7 @@
         var fivepx = document.getElementById("5px");
         
         onepx.style.backgroundColor = "#f4f4f4";
+        
         
         var eraser_width = document.getElementById("eraser_width");
         eraser_width.style.display = "none";
@@ -193,7 +199,7 @@
         eraserwidnum = 1;
         
     
-        
+        */
         canvas.addEventListener( "click", function( event ) {
             
             if (prevx !== undefined) {
@@ -280,7 +286,7 @@
                 
             }else {
                 prectx.moveTo(prevx,prevy);
-                prectx.lineTo(begx,begy);
+                prectx.lineTo(last_xarray[0],last_yarray[0]);
             }
             
             prectx.stroke();
@@ -304,6 +310,7 @@
             
             ctx.beginPath();
             
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             console.log(shapearray);
@@ -315,47 +322,37 @@
                     for (k = 0; k < shapearray[j][0].length; k++){
                         
                         console.log(shapearray[j][0][k]);
-                         
                         
+                         if (penoreraser[shapearray.length-1] == false){
+                                ctx.globalCompositeOperation="destination-out";
+                            }else {
+                                 ctx.globalCompositeOperation="source-over";
+                            }
                         
-                        ctx.lineTo(shapearray[j][0][k],shapearray[j][1][k]);
-                        
+                             ctx.lineTo(shapearray[j][0][k], shapearray[j][1][k]);
+
                        
                         if (k == shapearray[j][0].length - 1) {
                             
+                           
 
                             if (isfill[shapearray.length-1] == true) {
-                            
-                                if (penoreraser[shapearray.length-1] == true){
-                                    ctx.globalCompositeOperation="destination-out";
-                                    ctx.fill();
-                                    
-                                }  else if(penoreraser[shapearray.length-1] == false) {
-                                    console.log("tes");
-                                    for (l = 0; l < shapearray[shapearray.length][0]; l++){
-                                        ctx.globalCompositeOperation="destination-out";
-                                        ctx.lineTo(shapearray[shapearray.length-1][0][l],shapearray[shapearray.length-1][l][1]);
-                                    }
-                                
-                                }
-                                
-                                console.log("now");
-                                
                                 ctx.globalCompositeOperation="source-over";
-                                
-                                
                                 isfill.pop();
-                                
                             }
-                            
-                            
                             
                             if (isfill[j] == true) {
-                                ctx.fill();
+                                ctx.fill(); 
+                            
                             }
+                            
                             ctx.stroke();
+                            
                             ctx.beginPath();
+                            
                         }
+                        
+                        
                     }
             
             
@@ -364,6 +361,7 @@
                 
                penoreraser.pop();
                 
+                console.log("pop");
                 shapearray_last = shapearray[shapearray.length-1];
                 last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2];
                 last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1];
@@ -372,6 +370,7 @@
            }
             
             ctx.stroke();
+               
             
             prevx = last_xarray[last_xarray.length-1];
             prevy = last_yarray[last_yarray.length-1];
@@ -381,11 +380,7 @@
             console.log(penoreraser);
             
         }
-        
-        function redo() {
-            
-        }
-        
+  
         
         
         function previewEnd() {
@@ -409,7 +404,7 @@
             
             ispen = true;
             iseraser = false;
-            
+            /*
             if (penwidnum == 1) {
                 pen1();
             } else if (penwidnum == 2) {
@@ -421,7 +416,7 @@
             } else if (penwidnum == 5) {
                 pen5();
             }
-            
+            */
             startPath();
             
             
@@ -436,7 +431,7 @@
             
             ispen = false;
             iseraser = true;
-            
+            /*
             if (eraserwidnum == 1) {
                 eraser1();
             } else if (eraserwidnum == 2) {
@@ -448,6 +443,7 @@
             } else if (eraserwidnum == 5) {
                 eraser5();
             }
+            */
             
             startPath();
             
@@ -463,19 +459,18 @@
 
             penoreraser.push(ispen);
             
-            penwidths.push(widnum);
-            
-            console.log(penwidths);
             
             console.log(penoreraser);
         }
         
         
         function endPath() {
-            ctx.closePath();
+            ctx.lineTo(last_xarray[0],last_yarray[0]);
+            
+            
             ctx.stroke();
             
-    
+    console.log(last_xarray[0]);
             
             last_xarray.push(last_xarray[0]);
             last_yarray.push(last_yarray[0]);
@@ -564,7 +559,7 @@
             }
     
         }
-        
+        /*
         function pwshow() {
             
             if (ispen === true) {
@@ -738,6 +733,7 @@
             efourpx.style.backgroundColor = "transparent";
             efivepx.style.backgroundColor = "#f4f4f4";
         }
+        */
 
     </script>
     
