@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Draw</title>
@@ -8,23 +9,23 @@
 </head>
 
 <body>
-  
-   <div class="container" onmousemove="getPos(event)" onmouseout="stopTracking()">
-        
+
+    <div class="container" onmousemove="getPos(event)" onmouseout="stopTracking()">
+
         <canvas id="previewCanvas"></canvas>
         <canvas id="drawCanvas"></canvas>
-        
-      <!--  <div class="menushow" id="lmenushow"></div>
+
+        <!--  <div class="menushow" id="lmenushow"></div>
         
         <div class="menushow" id="bmenushow"></div>-->
-        
+
         <div class="menu">
-              
-            <div class="left_menu" id="left_menu" >
-               
+
+            <div class="left_menu" id="left_menu">
+
                 <div id="pwtoggle">
                     <a onclick="pen()" id="pen" class="button"></a>
-                <!--    <div id="pen_width">
+                    <!--    <div id="pen_width">
                         <a id="1px" onclick="pen1()">1px</a>
                         <a id="2px" onclick="pen2()">2px</a>
                         <a id="3px" onclick="pen3()">3px</a>
@@ -32,100 +33,93 @@
                         <a id="5px" onclick="pen5()">5px</a>
                     </div>-->
                 </div>
-            
-            <div id="ewtoggle">
-            <a onclick="eraser()" id="eraser" class="button"></a>
-                <!--<div id="eraser_width">
+
+                <div id="ewtoggle">
+                    <a onclick="eraser()" id="eraser" class="button"></a>
+                    <!--<div id="eraser_width">
                     <a id="e1px" onclick="eraser1()">1px</a>
                     <a id="e2px" onclick="eraser2()">2px</a>
                     <a id="e3px" onclick="eraser3()">3px</a>
                     <a id="e4px" onclick="eraser4()">4px</a>
                     <a id="e5px" onclick="eraser5()">5px</a>
                 </div>-->
-            </div>
-            
-            </div>
-            
-            <div class="bottom_menu" id="bottom_menu">
-               
-               <a onclick="undo()" id="undo">Undo</a>
-              
-                <a onclick="startPath()" id="startPath" class="button">Line</a>
-                <a onclick="endPath()" onmouseover="previewEnd()" onmouseout="previewEndOut()" id="endPath" ></a>
-                <button onclick="fill()" id="fill" ></button>
-                <div id="savehover">
-                <a onmouseover="previewEnd()" onmouseout="previewEndOut()" id="save"></a>
-                <div id="savechoice">
-                    <a id="transparent" onclick="screenshot()" onmouseover="previewEnd()" onmouseout="previewEndOut()" href="" download>Transparent</a><br>
-                    <a id="white" onclick="screenshotwhite()" onmouseover="previewEnd()" onmouseout="previewEndOut()" href="" download>White</a>
                 </div>
-                </div>
-                
+
             </div>
 
-       </div>
-       
+            <div class="bottom_menu" id="bottom_menu">
+
+                <a onclick="undo()" id="undo">Undo</a>
+
+                <a onclick="startPath()" id="startPath" class="button">Line</a>
+                <a onclick="endPath()" onmouseover="previewEnd()" onmouseout="previewEndOut()" id="endPath"></a>
+                <button onclick="fill()" id="fill"></button>
+                <div id="savehover">
+                    <a onmouseover="previewEnd()" onmouseout="previewEndOut()" id="save"></a>
+                    <div id="savechoice">
+                        <a id="transparent" onclick="screenshot()" onmouseover="previewEnd()" onmouseout="previewEndOut()" href="" download>Transparent</a><br>
+                        <a id="white" onclick="screenshotwhite()" onmouseover="previewEnd()" onmouseout="previewEndOut()" href="" download>White</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
         <div class="coordinates">
             <p>Click (<span id="xcoor">x</span>, <span id="ycoor">y</span>)</p>
             <p>Hover <span id="hovcoor">(x, y)</span></p>
         </div>
-        
+
         <a onclick="toggle()" id="toggle">Info</a>
-        
+
         <div id="sidebar">
-           
+
             <p>
-            Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-            
-            <br>
+                Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
 
-            Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-            
-            <br>
+                <br> Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
 
-            Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-            
-            <br>
+                <br> Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
 
-            Icons made by <a href="https://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+                <br> Icons made by <a href="https://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
             </p>
-            
+
         </div>
-    
+
     </div>
-    
-    
+
+
     <script>
-        
         var preCanvas = document.getElementById("previewCanvas");
         preCanvas.width = window.innerWidth;
         preCanvas.height = window.innerHeight;
         var prectx = preCanvas.getContext("2d");
-        
+
         var canvas = document.getElementById("drawCanvas");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         var ctx = canvas.getContext("2d");
-        
-        ctx.strokeStyle="#000";
-        
+
+        ctx.strokeStyle = "#000";
+
         prectx.fillStyle = "#fff";
         prectx.fillRect(0, 0, preCanvas.width, preCanvas.height);
-        
+
         ctx.fillStyle = "#000";
-        
+
         prectx.strokeStyle = "#aaaaaa";
-        
+
         prectx.lineWidth = 2;
-        
+
         ctx.lineWidth = 3;
-        
+
         var x;
         var y;
-        
+
         var prevx;
         var prevy;
-        
+
         var begx;
         var begy;
         /*
@@ -134,44 +128,44 @@
         */
         var ispen = true;
         var iseraser = false;
-        
+
         var isendpath = false;
-        
+
         var shapearray = [];
-        
+
         var shapearray_last;
         var last_xarray;
         var last_yarray;
-        
+
         var deleted_xarray = [];
         var deleted_yarray = [];
-        
+
         var isfill = [];
         var penoreraser = [];
-       
+
         /*
         var widnum = 1;
         */
-        
+
         var startPathbutton = document.getElementById("startPath");
         startPathbutton.disabled = true;
         startPathbutton.style.opacity = "0.5";
         startPathbutton.style.cursor = "default";
-        
+
         var endPathbutton = document.getElementById("endPath");
         endPathbutton.disabled = true;
         endPathbutton.style.opacity = "0.5";
         endPathbutton.style.cursor = "default";
-        
+
         var fillbutton = document.getElementById("fill");
         fillbutton.disabled = true;
         fillbutton.style.opacity = "0.5";
         fillbutton.style.cursor = "default";
-    
+
         var toggleb = document.getElementById("toggle");
         var sidebar = document.getElementById("sidebar");
         sidebar.style.display = "none";
-       /* 
+        /* 
         var pen_width = document.getElementById("pen_width");
         pen_width.style.display = "none";
        
@@ -200,208 +194,221 @@
         
     
         */
-        canvas.addEventListener( "click", function( event ) {
-            
+        canvas.addEventListener("click", function(event) {
+
             if (prevx !== undefined) {
-                            
-                ctx.lineTo(prevx,prevy);
+
+                ctx.lineTo(prevx, prevy);
                 x = event.pageX;
                 y = event.pageY;
-                ctx.lineTo(x,y);
+                ctx.lineTo(x, y);
                 ctx.stroke();
-                
+
                 document.getElementById("xcoor").innerHTML = x;
                 document.getElementById("ycoor").innerHTML = y;
-                
+
                 prevx = x;
                 prevy = y;
-                
+
                 startPathbutton.disabled = false;
                 startPathbutton.style.opacity = "1.0";
                 startPathbutton.style.cursor = "pointer";
-                
+
                 endPathbutton.disabled = false;
                 endPathbutton.style.opacity = "1.0";
                 endPathbutton.style.cursor = "pointer";
-                
+
                 last_xarray.push(x);
                 last_yarray.push(y);
-                
+
                 console.log(shapearray);
                 console.log(shapearray[shapearray.length - 1]);
-                console.log(shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2]);
-                console.log(shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1]);
-                
+                console.log(shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length - 2]);
+                console.log(shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length - 1]);
+
             } else if (prevx == undefined) {
-                
+
                 x = event.pageX;
                 y = event.pageY;
-    
+
                 document.getElementById("xcoor").innerHTML = x;
                 document.getElementById("ycoor").innerHTML = y;
-            
+
                 prevx = x;
                 prevy = y;
-                
+
                 begx = x;
                 begy = y;
-                
-                ctx.moveTo(begx,begy);
-                    
+
+                ctx.moveTo(begx, begy);
+
                 ctx.beginPath();
-                
-                shapearray.push([[x],[y]]);
-                
-                shapearray_last = shapearray[shapearray.length-1];
-                last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2];
-                last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1];
-                
+
+                shapearray.push([
+                    [x],
+                    [y]
+                ]);
+
+                shapearray_last = shapearray[shapearray.length - 1];
+                last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length - 2];
+                last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length - 1];
+
                 console.log(shapearray);
                 console.log(shapearray_last);
                 console.log(last_xarray);
                 console.log(last_yarray);
-                
+
             };
         });
-        
-        function getPos(e){
-            
-    		x=e.clientX;
-    		y=e.clientY;
-    		cursor="(" + x + ", " + y + ")";
-    		document.getElementById("hovcoor").innerHTML=cursor;
-            
-    	}
+
+        function getPos(e) {
+
+            x = e.clientX;
+            y = e.clientY;
+            cursor = "(" + x + ", " + y + ")";
+            document.getElementById("hovcoor").innerHTML = cursor;
+
+        }
 
         function render() {
-            
+
             prectx.clearRect(0, 0, preCanvas.width, preCanvas.height);
-            
+
             prectx.beginPath();
-            
-            if (isendpath===false) {
-            
-                prectx.moveTo(prevx,prevy);
-                prectx.lineTo(x,y);
-                
-            }else {
-                prectx.moveTo(prevx,prevy);
-                prectx.lineTo(last_xarray[0],last_yarray[0]);
+
+            if (isendpath === false) {
+
+                prectx.moveTo(prevx, prevy);
+                prectx.lineTo(x, y);
+
+            } else {
+                prectx.moveTo(prevx, prevy);
+                prectx.lineTo(last_xarray[0], last_yarray[0]);
             }
-            
+
             prectx.stroke();
-            
+
             requestAnimationFrame(render);
-                
+
         }
-        
-         render();
-        
+
+        render();
+
         function undo() {
-            
-            deleted_xarray.push(last_xarray[last_xarray.length-1]);
+
+            deleted_xarray.push(last_xarray[last_xarray.length - 1]);
             last_xarray.pop();
-            
-            deleted_yarray.push(last_yarray[last_yarray.length-1]);
+
+            deleted_yarray.push(last_yarray[last_yarray.length - 1]);
             last_yarray.pop();
-            
+
             console.log(last_xarray);
             console.log(last_yarray);
-            
+
             ctx.beginPath();
-            
-            
+
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             console.log(shapearray);
-            
-           for (j = 0; j < shapearray.length; j++) {
-   
-               console.log(shapearray[j]);
-  
-                    for (k = 0; k < shapearray[j][0].length; k++){
-                        
-                        console.log(shapearray[j][0][k]);
-                        
-                         if (penoreraser[shapearray.length-1] == false){
-                                ctx.globalCompositeOperation="destination-out";
-                            }else {
-                                 ctx.globalCompositeOperation="source-over";
-                            }
-                        
-                             ctx.lineTo(shapearray[j][0][k], shapearray[j][1][k]);
 
-                       
-                        if (k == shapearray[j][0].length - 1) {
-                            
-                           
+            for (j = 0; j < shapearray.length; j++) {
 
-                            if (isfill[shapearray.length-1] == true) {
-                                ctx.globalCompositeOperation="source-over";
-                                isfill.pop();
-                            }
-                            
-                            if (isfill[j] == true) {
-                                ctx.fill(); 
-                            
-                            }
-                            
-                            ctx.stroke();
-                            
-                            ctx.beginPath();
-                            
-                        }
-                        
-                        
+                console.log(shapearray[j]);
+
+                for (k = 0; k < shapearray[j][0].length; k++) {
+
+                    console.log(shapearray[j][0][k]);
+
+                    if (penoreraser[j] == false) {
+                        ctx.globalCompositeOperation = "destination-out";
+                        console.log("消す");
+                    } else {
+                        ctx.globalCompositeOperation = "source-over";
+                        console.log("消さない");
+
                     }
-            
-            
-            if (last_xarray.length == 0) {
-                shapearray.pop();
-                
-               penoreraser.pop();
-                
-                console.log("pop");
-                shapearray_last = shapearray[shapearray.length-1];
-                last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-2];
-                last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length-1];
-                
+
+                    ctx.lineTo(shapearray[j][0][k], shapearray[j][1][k]);
+
+
+                    if (k == shapearray[j][0].length - 1) {
+                        
+                        if (isfill[shapearray.length - 1] == true) {
+                            ctx.globalCompositeOperation = "source-over";
+                            isfill.pop();
+                        }
+
+                        if (isfill[j] == true) {
+                            ctx.fill();
+
+                        }
+
+                        ctx.stroke();
+
+                        ctx.beginPath();
+
+                    }
+
+
+                }
+
+
+                if (last_xarray.length == 0) {
+                    shapearray.pop();
+
+                    penoreraser.pop();
+
+                    console.log("pop");
+                    shapearray_last = shapearray[shapearray.length - 1];
+                    last_xarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length - 2];
+                    last_yarray = shapearray[shapearray.length - 1][shapearray[shapearray.length - 1].length - 1];
+
+                    if (penoreraser[shapearray.length - 1] == true) {
+                        document.getElementById("pen").style.left = "-5px";
+                        document.getElementById("eraser").style.left = "-50px";
+                    } else if(penoreraser[shapearray.length - 1] == false) {
+                        document.getElementById("pen").style.left = "-50px";
+                        document.getElementById("eraser").style.left = "-5px";
+                    }
+
+
+                }
             }
-           }
-            
+
             ctx.stroke();
-               
-            
-            prevx = last_xarray[last_xarray.length-1];
-            prevy = last_yarray[last_yarray.length-1];
-            
+
+
+            prevx = last_xarray[last_xarray.length - 1];
+            prevy = last_yarray[last_yarray.length - 1];
+
             console.log(isfill);
-            
+
             console.log(penoreraser);
-            
+
         }
-  
-        
-        
+
+
+
         function previewEnd() {
             isendpath = true;
         }
-        
+
         function previewEndOut() {
             isendpath = false;
         }
-    
-    	function stopTracking() {
-    		document.getElementById("hovcoor").innerHTML="(x, y)";
-    	}
-        
+
+        function stopTracking() {
+            document.getElementById("hovcoor").innerHTML = "(x, y)";
+        }
+
         function pen() {
-            ctx.globalCompositeOperation="source-over";
-            ctx.fillStyle="#000";
-            
+            ctx.globalCompositeOperation = "source-over";
+            ctx.fillStyle = "#000";
+
             document.getElementById("pen").style.left = "-5px";
             document.getElementById("eraser").style.left = "-50px";
-            
+
             ispen = true;
             iseraser = false;
             /*
@@ -418,17 +425,17 @@
             }
             */
             startPath();
-            
-            
-            
+
+
+
         }
-        
+
         function eraser() {
-            ctx.globalCompositeOperation="destination-out";
-            
+            ctx.globalCompositeOperation = "destination-out";
+
             document.getElementById("pen").style.left = "-50px";
             document.getElementById("eraser").style.left = "-5px";
-            
+
             ispen = false;
             iseraser = true;
             /*
@@ -444,120 +451,136 @@
                 eraser5();
             }
             */
-            
+
             startPath();
-            
+
         }
-        
+
         startPathbutton.addEventListener("click", peneraser);
-        
+
         endPathbutton.addEventListener("click", peneraser);
-        
+
         function peneraser() {
             isfill.push(false);
             console.log(isfill);
 
             penoreraser.push(ispen);
-            
-            
+
+
             console.log(penoreraser);
         }
-        
-        
+
+
         function endPath() {
-            ctx.lineTo(last_xarray[0],last_yarray[0]);
+            ctx.lineTo(last_xarray[0], last_yarray[0]);
+
             
             
             ctx.stroke();
-            
-    console.log(last_xarray[0]);
-            
+
+            console.log(last_xarray[0]);
+
             last_xarray.push(last_xarray[0]);
             last_yarray.push(last_yarray[0]);
-    
+
             prevx = undefined;
             prevy = undefined;
-            
+
             fillbutton.disabled = false;
             fillbutton.style.opacity = "1.0";
             fillbutton.style.cursor = "pointer";
-            
+
             startPathbutton.disabled = true;
             startPathbutton.style.opacity = "0.5";
             startPathbutton.style.cursor = "default";
-            
+
             endPathbutton.disabled = true;
             endPathbutton.style.opacity = "0.5";
             endPathbutton.style.cursor = "default";
-            
-            
+
+
         }
-        
+
         function startPath() {
             ctx.beginPath();
-            
+
             prevx = undefined;
             prevy = undefined;
-            
+
             startPathbutton.disabled = true;
             startPathbutton.style.opacity = "0.5";
             startPathbutton.style.cursor = "default";
-            
+
             endPathbutton.disabled = true;
             endPathbutton.style.opacity = "0.5";
             endPathbutton.style.cursor = "default";
         }
-        
-        
-        
+
+
+
         function fill() {
-            ctx.fill();
+            /*
+            for (j = 0; j < shapearray.length; j++) {
+
+                console.log(shapearray[j]);
+
+                for (k = 0; k < shapearray[j][0].length; k++) {
+
+                    console.log(shapearray[j][0][k]);
+*/
             
+            for (i = 0; i < shapearray[shapearray.length-1][0]; i++){
+                ctx.lineTo(shapearray[shapearray.length-1][0][i],shapearray[shapearray.length-1][1][i]);
+                
+            }
+            
+            ctx.fill();
+
             fillbutton.disabled = true;
             fillbutton.style.opacity = "0.5";
             fillbutton.style.cursor = "default";
-            
+
             isfill[isfill.length - 1] = true;
-            
+
             console.log(isfill);
         }
-        
+
         function screenshot() {
             var transparent = document.getElementById("transparent");
             var img = canvas.toDataURL("image/png");
             transparent.setAttribute('href', img);
         }
-        
-        
+
+
         function screenshotwhite() {
-            
+
             prectx.fillStyle = "#fff";
             prectx.fillRect(0, 0, preCanvas.width, preCanvas.height);
-            
+
             var sscanvas = document.createElement("canvas");
             sscanvas.width = window.innerWidth;
             sscanvas.height = window.innerHeight;
             var ssctx = sscanvas.getContext("2d");
-            
-            ssctx.drawImage(preCanvas,0,0);
-            ssctx.drawImage(canvas,0,0);
-            
+
+            ssctx.drawImage(preCanvas, 0, 0);
+            ssctx.drawImage(canvas, 0, 0);
+
             var white = document.getElementById("white");
             var img = sscanvas.toDataURL("image/png");
             white.setAttribute('href', img);
         }
-        
+
         function toggle() {
-            
+
             if (sidebar.style.display === "none") {
                 sidebar.style.display = "initial";
                 toggleb.style.color = "#f7f7f7";
-                
+
             } else {
                 sidebar.style.display = "none";
                 toggleb.style.color = "#000"
             }
-    
+
         }
         /*
         function pwshow() {
@@ -734,9 +757,9 @@
             efivepx.style.backgroundColor = "#f4f4f4";
         }
         */
-
     </script>
-    
-    
+
+
 </body>
+
 </html>
