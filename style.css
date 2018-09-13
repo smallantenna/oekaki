@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+body {
+    overflow: hidden;
+}
+
 canvas#previewCanvas {
     z-index: 0;
 }
